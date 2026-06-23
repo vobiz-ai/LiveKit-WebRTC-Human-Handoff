@@ -14,7 +14,6 @@ frontend, with a [Vobiz](https://vobiz.ai) SIP trunk for the telephony leg.
 ---
 
 ## Table of contents
-- [Why not SIP REFER?](#why-not-sip-refer)
 - [Architecture](#architecture)
 - [How a handoff works, step by step](#how-a-handoff-works-step-by-step)
 - [Repository layout](#repository-layout)
@@ -27,29 +26,6 @@ frontend, with a [Vobiz](https://vobiz.ai) SIP trunk for the telephony leg.
 - [Mapping to production (Ameyo overflow)](#mapping-to-production-ameyo-overflow)
 - [Further docs](#further-docs)
 - [Security notes](#security-notes)
-
----
-
-## Why not SIP REFER?
-
-The classic way to transfer a phone call is **SIP REFER** — you tell the carrier "re-point
-this call leg to a new destination." LiveKit exposes it as
-`transfer_sip_participant(...)`.
-
-**It cannot be used here.** REFER operates on a **SIP dialog**. The customer in this app
-is connected over **WebRTC** (LiveKit SDK in the browser) — there is *no SIP leg* on their
-side to refer. Sending a REFER would fail because there is no active SIP call to transfer.
-
-So instead of *transferring the customer out*, we **bring the human in**:
-
-| | SIP REFER (not used) | This project (additive) |
-|---|---|---|
-| Mechanism | Re-point an existing SIP leg | `create_sip_participant` adds a *new* SIP leg to the room |
-| Works on a WebRTC customer? | ❌ no SIP dialog to refer | ✅ customer never moves |
-| Result | Customer leaves, talks to new dest | Customer + human share one room |
-
-LiveKit's SFU **mixes every participant's audio**, so once the human's phone joins the
-room, the WebRTC customer and the phone hear each other automatically — no bridging code.
 
 ---
 
