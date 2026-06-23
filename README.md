@@ -108,6 +108,7 @@ LiveKit-WebRTC-Handoff/
 │   ├── app/api/token/     # mints the join token w/ agent dispatch
 │   └── .env.example       # frontend config template (copy to .env.local)
 └── docs/
+    ├── TELEPHONY-SETUP.md  # create the Vobiz SIP trunk → OUTBOUND_TRUNK_ID (do this first)
     ├── ARCHITECTURE.md     # how room/dispatch/audio-mixing/mute work
     ├── SIP-HEADERS.md      # how X-VH-* headers are sent & populated
     ├── WEBHOOKS.md         # Vobiz trunk webhooks (CallInitiated/Hangup, MOS/jitter)
@@ -121,17 +122,24 @@ LiveKit-WebRTC-Handoff/
 - **Python 3.11+** and **Node 18+** (Node 22 tested)
 - A **LiveKit Cloud** project (URL + API key/secret)
 - **OpenAI** and **Deepgram** API keys
-- A **Vobiz SIP trunk** registered as a **LiveKit outbound SIP trunk** (see
-  `setup_trunk.py` pattern in the sibling `LiveKit-Vobiz-Outbound` project)
+- A **Vobiz SIP trunk** registered as a **LiveKit outbound SIP trunk** — this gives you the
+  `OUTBOUND_TRUNK_ID` (`ST_…`). **Set this up first:** see
+  **[docs/TELEPHONY-SETUP.md](docs/TELEPHONY-SETUP.md)**, which references the
+  [vobiz-ai/LiveKit-Vobiz-Outbound](https://github.com/vobiz-ai/LiveKit-Vobiz-Outbound) repo.
 - A phone number to receive the transfer (your mobile works for testing)
 
 ---
 
 ## Setup
 
+**0. Telephony (do this first).** Create the Vobiz outbound SIP trunk in LiveKit to get your
+`OUTBOUND_TRUNK_ID` and `VOBIZ_*` values — full walkthrough (CLI + Python) in
+**[docs/TELEPHONY-SETUP.md](docs/TELEPHONY-SETUP.md)**. Without a working trunk, the agent
+can greet over WebRTC but cannot dial a human.
+
 **1. Backend (Python agent)**
 ```bash
-cp .env.example .env          # then fill in real values
+cp .env.example .env          # then fill in real values (incl. OUTBOUND_TRUNK_ID + VOBIZ_*)
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
@@ -254,6 +262,7 @@ calls *to* the agent instead; that path is real SIP and *can* use REFER.)
 ---
 
 ## Further docs
+- [`docs/TELEPHONY-SETUP.md`](docs/TELEPHONY-SETUP.md) — create the Vobiz SIP trunk in LiveKit (do this first); refs [LiveKit-Vobiz-Outbound](https://github.com/vobiz-ai/LiveKit-Vobiz-Outbound)
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — room/dispatch/audio-mixing/mute internals
 - [`docs/SIP-HEADERS.md`](docs/SIP-HEADERS.md) — how headers are sent and populated end-to-end
 - [`docs/WEBHOOKS.md`](docs/WEBHOOKS.md) — Vobiz trunk webhooks for call events + quality (MOS/jitter)
