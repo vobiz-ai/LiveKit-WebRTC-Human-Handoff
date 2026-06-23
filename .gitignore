@@ -1,0 +1,29 @@
+# ---- secrets (NEVER commit) ----
+.env
+.env.local
+frontend/.env.local
+*.pem
+*.key
+
+# ---- python ----
+.venv/
+__pycache__/
+*.pyc
+.ruff_cache/
+
+# ---- node / next ----
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+
+# ---- os / editor ----
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# ---- runtime artifacts ----
+KMS/
+*.pcap
