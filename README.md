@@ -195,6 +195,12 @@ call. Try **"transfer me to +9199…"** or **"I need billing"** for the other ro
 | **Room survives AI leaving** | `close_on_disconnect=False` |
 | **Swappable TTS** | `TTS_PROVIDER=openai|cartesia` |
 
+> **Warm transfer (two-session pattern).** This project does a single-room handoff (the human
+> joins the live room and the AI mutes). For a true *warm* transfer — where a second agent
+> briefs the human in a **private consultation room** before the caller is connected — follow
+> LiveKit's official pattern, which uses **two sessions/rooms**:
+> **<https://docs.livekit.io/telephony/features/transfers/warm/>**
+
 ---
 
 ## SIP headers (briefing the human)
@@ -267,6 +273,7 @@ calls *to* the agent instead; that path is real SIP and *can* use REFER.)
 - [`docs/SIP-HEADERS.md`](docs/SIP-HEADERS.md) — how headers are sent and populated end-to-end
 - [`docs/WEBHOOKS.md`](docs/WEBHOOKS.md) — Vobiz trunk webhooks for call events + quality (MOS/jitter)
 - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) — agent kept talking, bad audio, dial failed, etc.
+- [LiveKit warm transfers](https://docs.livekit.io/telephony/features/transfers/warm/) — official two-session pattern (consultation room → brief the human → connect the caller)
 
 ---
 
